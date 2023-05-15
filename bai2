@@ -1,0 +1,191 @@
+package thuchanh3;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class HangHoa {
+    protected String maHang;
+    protected String tenHang;
+    protected int soLuongTon;
+
+    public HangHoa(String maHang, String tenHang, int soLuongTon) {
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.soLuongTon = soLuongTon;
+    }
+
+    public abstract String danhGiaBanHang();
+}
+
+class HangThucPham extends HangHoa {
+    private String ngaySanXuat;
+    private String ngayHetHan;
+    private String nhaCungCap;
+
+    public HangThucPham(String maHang, String tenHang, int soLuongTon, String ngaySanXuat, String ngayHetHan, String nhaCungCap) {
+        super(maHang, tenHang, soLuongTon);
+        this.ngaySanXuat = ngaySanXuat;
+        this.ngayHetHan = ngayHetHan;
+        this.nhaCungCap = nhaCungCap;
+    }
+
+    @Override
+    public String danhGiaBanHang() {
+        if (soLuongTon > 0 && ngayHetHan.compareTo(getCurrentDate()) > 0) {
+            return "Kho ban";
+        } else {
+            return "Khong danh gia";
+        }
+    }
+
+    private String getCurrentDate() {
+        // Lấy ngày hiện tại
+        return "15/05/2023";
+    }
+}
+
+class HangDienMay extends HangHoa {
+    private int thoiGianBaoHanh;
+    private int congSuat;
+
+    public HangDienMay(String maHang, String tenHang, int soLuongTon, int thoiGianBaoHanh, int congSuat) {
+        super(maHang, tenHang, soLuongTon);
+        this.thoiGianBaoHanh = thoiGianBaoHanh;
+        this.congSuat = congSuat;
+    }
+
+    @Override
+    public String danhGiaBanHang() {
+        if (soLuongTon < 3) {
+            return "Ban duoc";
+        } else {
+            return "Khong danh gia";
+        }
+    }
+}
+
+class HangSanhSu extends HangHoa {
+    private String ngaySanXuat;
+    private String ngayNhapKho;
+
+    public HangSanhSu(String maHang, String tenHang, int soLuongTon, String ngaySanXuat, String ngayNhapKho) {
+        super(maHang, tenHang, soLuongTon);
+        this.ngaySanXuat = ngaySanXuat;
+        this.ngayNhapKho = ngayNhapKho;
+    }
+
+    @Override
+    public String danhGiaBanHang() {
+        if (soLuongTon > 50 && tinhThoiGianLuuKho() > 10) {
+            return "Ban cham";
+        } else {
+            return "Khong danh gia";
+        }
+    }
+
+    private int tinhThoiGianLuuKho() {
+        // Tính thời gian lưu kho
+        return 15;
+    }
+}
+
+class DanhSachHangHoa {
+    private List<HangHoa>danhSachHang;
+
+    public DanhSachHangHoa() {
+        danhSachHang = new ArrayList<>();
+    }
+
+    public boolean themHangHoa(HangHoa hangHoa) {
+        if (!kiemTraTrungMaHang(hangHoa.maHang)) {
+            danhSachHang.add(hangHoa);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean kiemTraTrungMaHang(String maHang) {
+        for (HangHoa hangHoa : danhSachHang) {
+            if (hangHoa.maHang.equals(maHang)) {
+                return true;
+            }
+        }
+return false;
+
+}
+
+    public void inDanhSachHangHoa() {
+        for (HangHoa hangHoa : danhSachHang) {
+            System.out.println("Ma hang: " + hangHoa.maHang);
+            System.out.println("Ten hang: " + hangHoa.tenHang);
+            System.out.println("So luong ton: " + hangHoa.soLuongTon);
+            System.out.println("Danh gia ban hang: " + hangHoa.danhGiaBanHang());
+            System.out.println("--------------------------------------");
+        }
+    }
+}
+
+
+
+
+
+
+
+class DanhSachHangHoa {
+    private List<HangHoa>danhSachHang;
+
+    public DanhSachHangHoa() {
+        danhSachHang = new ArrayList<>();
+    }
+
+    public boolean themHangHoa(HangHoa hangHoa) {
+        if (!kiemTraTrungMaHang(hangHoa.maHang)) {
+            danhSachHang.add(hangHoa);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean kiemTraTrungMaHang(String maHang) {
+        for (HangHoa hangHoa : danhSachHang) {
+            if (hangHoa.maHang.equals(maHang)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void inDanhSachHangHoa() {
+        for (HangHoa hangHoa : danhSachHang) {
+            System.out.println("Ma hang: " + hangHoa.maHang);
+            System.out.println("Ten hang: " + hangHoa.tenHang);
+            System.out.println("So luong ton: " + hangHoa.soLuongTon);
+            System.out.println("Đanh gia ban hang: " + hangHoa.danhGiaBanHang());
+            System.out.println("--------------------------------------");
+        }
+    }
+}
+
+package thuchanh3;
+
+public class Main {
+    public static void main(String[] args) {
+        DanhSachHangHoa danhSach = new DanhSachHangHoa();
+
+        // Thêm hàng hóa vào danh sách
+        HangThucPham thucPham = new HangThucPham("TP001", "Thuc pham 1", 10, "01/05/2023", "31/05/2023", "Nha cung cap A");
+        danhSach.themHangHoa(thucPham);
+
+        HangDienMay dienMay = new HangDienMay("DM001", "Dien may 1", 5, 12, 1000);
+        danhSach.themHangHoa(dienMay);
+
+        HangSanhSu sanhSu = new HangSanhSu("SS001", "Sanh su 1", 60, "01/05/2023", "10/05/2023");
+        danhSach.themHangHoa(sanhSu);
+
+        // In danh sách hàng hóa
+        danhSach.inDanhSachHangHoa();
+    }
+}
