@@ -1,0 +1,242 @@
+
+package thuchanh3;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class Student {
+    private String maSV;
+    private String hoTen;
+    private int namSinh;
+
+    public Student(String maSV, String hoTen, int namSinh) {
+        this.maSV = maSV;
+        this.hoTen = hoTen;
+        this.namSinh = namSinh;
+    }
+
+    public String getMaSV() {
+        return maSV;
+    }
+
+    public void setMaSV(String maSV) {
+        this.maSV = maSV;
+    }
+
+    public String getHoTen() {
+        return hoTen;
+    }
+
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public int getNamSinh() {
+        return namSinh;
+    }
+
+    public void setNamSinh(int namSinh) {
+        this.namSinh = namSinh;
+    }
+
+    public String toString() {
+        return "Mã SV: " + maSV + "\nHọ tên: " + hoTen + "\nNăm sinh: " + namSinh + "\n";
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Student> danhSachSinhVien = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+
+        int choice;
+        do {
+            System.out.println("----- MENU -----");
+            System.out.println("1. Lay danh sach sinh vien");
+            System.out.println("2. Them sinh vien moi");
+            System.out.println("3. Xoa sinh vien theo ma");
+            System.out.println("4. Sua thong tin sinh vien");
+            System.out.println("5. Tim kiem sinh vien theo ma");
+            System.out.println("6. Tim kiem sinh vien theo ten");
+            System.out.println("7. Sap xep danh sach theo ma tang dan");
+            System.out.println("0. Thoat");
+            System.out.print("Nhap lua chon cua ban: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Đọc ký tự xuống dòng sau khi nhập lựa chọn
+
+            switch (choice) {
+                case 1:
+                    layDanhSachSinhVien(danhSachSinhVien);
+                    break;
+                case 2:
+                    themSinhVienMoi(danhSachSinhVien, scanner);
+                    break;
+                case 3:
+                    xoaSinhVien(danhSachSinhVien, scanner);
+                    break;
+                case 4:
+                    suaThongTinSinhVien(danhSachSinhVien, scanner);
+                    break;
+                case 5:
+                    timKiemSinhVienTheoMa(danhSachSinhVien, scanner);
+                    break;
+                case 6:
+                    timKiemSinhVienTheoTen(danhSachSinhVien, scanner);
+                    break;
+                case 7:
+                    sapXepTheoMaTangDan(danhSachSinhVien);
+                    break;
+                case 0:
+                    System.out.println("Da thoat chuong trinh.");
+                    break;
+                default:
+                    System.out.println("Lua chon khong hop le. Vui long chon lai");
+            }
+        } while(choice != 0);
+        scanner.close();
+    }
+
+    // Phương thức lấy danh sách sinh viên
+    public static void layDanhSachSinhVien(ArrayList<Student> danhSachSinhVien) {
+        if (danhSachSinhVien.isEmpty()) {
+            System.out.println("Danh sach sinh vien trong.");
+        } else {
+            System.out.println("Danh sach sinh vien:");
+            for (Student student : danhSachSinhVien) {
+                System.out.println(student.toString());
+            }
+        }
+    }
+
+    // Phương thức thêm sinh viên mới
+    public static void themSinhVienMoi(ArrayList<Student> danhSachSinhVien, Scanner scanner) {
+        System.out.print("Nhap ma sinh vien: ");
+        String maSV = scanner.nextLine();
+
+        // Kiểm tra xem mã sinh viên đã tồn tại trong danh sách hay chưa
+        boolean isMaSVDuplicated = false;
+        for (Student student : danhSachSinhVien) {
+            if (student.getMaSV().equals(maSV)) {
+                isMaSVDuplicated = true;
+                break;
+            }
+        }
+
+        if (isMaSVDuplicated) {
+            System.out.println("Ma sinh vien da ton tai trong danh sach.");
+        } else {
+            System.out.print("Nhap ho ten sinh vien: ");
+            String hoTen = scanner.nextLine();
+
+            System.out.print("Nhap nam sinh sinh vien: ");
+            int namSinh = scanner.nextInt();
+            scanner.nextLine(); // Đọc ký tự xuống dòng sau khi nhập năm sinh
+
+            Student newStudent = new Student(maSV, hoTen, namSinh);
+            danhSachSinhVien.add(newStudent);
+            System.out.println("Them sinh vien thanh cong.");
+        }
+    }
+
+    // Phương thức xóa sinh viên theo mã
+    public static void xoaSinhVien(ArrayList<Student> danhSachSinhVien, Scanner scanner) {
+        System.out.print("Nhap ma sinh vien can xoa ");
+        String maSV = scanner.nextLine();
+
+        boolean isRemoved = false;
+        for (int i = 0; i < danhSachSinhVien.size(); i++) {
+            Student student = danhSachSinhVien.get(i);
+            if (student.getMaSV().equals(maSV)) {
+                danhSachSinhVien.remove(i);
+                isRemoved = true;
+                System.out.println("Xoa sinh vien thanh cong.");
+                break;
+            }
+        }
+
+        if (!isRemoved) {
+            System.out.println("Khong tim thay sinh vien co ma " + maSV + " trong danh sach.");
+        }
+    }
+
+    // Phương thức sửa thông tin sinh viên
+    public static void suaThongTinSinhVien(ArrayList<Student> danhSachSinhVien, Scanner scanner) {
+        System.out.print("Nhap ma sinh vien can sua: ");
+        String maSV = scanner.nextLine();
+
+        boolean isFound = false;
+        for (Student student : danhSachSinhVien) {
+            if (student.getMaSV().equals(maSV)) {
+                System.out.print("Nhap ho ten moi: ");
+                String hoTen = scanner.nextLine();
+
+                System.out.print("Nhap nam sinh moi: ");
+    int namSinh = scanner.nextInt();
+                scanner.nextLine(); // Đọc ký tự xuống dòng sau khi nhập năm sinh
+
+                student.setHoTen(hoTen);
+                student.setNamSinh(namSinh);
+                isFound = true;
+                System.out.println("Sua thong tin sinh vien thanh cong.");
+                break;
+            }
+        }
+
+        if (!isFound) {
+            System.out.println("Khong tim thay sinh vien co ma " + maSV + " trong danh sach.");
+        }
+    }
+
+    // Phương thức tìm kiếm sinh viên theo mã
+    public static void timKiemSinhVienTheoMa(ArrayList<Student> danhSachSinhVien, Scanner scanner) {
+        System.out.print("Nhap ma sinh vien can tim: ");
+        String maSV = scanner.nextLine();
+
+        boolean isFound = false;
+        for (Student student : danhSachSinhVien) {
+            if (student.getMaSV().equals(maSV)) {
+                System.out.println("Thong tin sinh vien co ma " + maSV + ":");
+                System.out.println(student.toString());
+                isFound = true;
+                break;
+            }
+        }
+
+        if (!isFound) {
+            System.out.println("Khong tim thay sinh vien co ma " + maSV + " trong danh sach.");
+        }
+    }
+
+    // Phương thức tìm kiếm sinh viên theo tên
+    public static void timKiemSinhVienTheoTen(ArrayList<Student> danhSachSinhVien, Scanner scanner) {
+        System.out.print("Nhap ten sinh vien can tim: ");
+        String tenSV = scanner.nextLine();
+
+        boolean isFound = false;
+        for (Student student : danhSachSinhVien) {
+            if (student.getHoTen().equalsIgnoreCase(tenSV)) {
+                System.out.println("Thong tin sinh vien co ten " + tenSV + ":");
+                System.out.println(student.toString());
+                isFound = true;
+            }
+        }
+
+        if (!isFound) {
+            System.out.println("Khong tim thay sinh vien co ten " + tenSV + " trong danh sach.");
+        }
+    }
+
+    // Phương thức sắp xếp danh sách theo mã tăng dần
+    public static void sapXepTheoMaTangDan(ArrayList<Student> danhSachSinhVien) {
+        Collections.sort(danhSachSinhVien, new Comparator<Student>() {
+            @Override
+            public int compare(Student sv1, Student sv2) {
+                return sv1.getMaSV().compareTo(sv2.getMaSV());
+            }
+        });
+
+        System.out.println("Danh sach sinh vien da duoc sap xep theo ma tang dan:");
+        for (Student student : danhSachSinhVien) {
+            System.out.println(student.toString());
+        }
+    }
+}
