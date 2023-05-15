@@ -1,0 +1,161 @@
+package thuchanh3;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+	public class Order {
+	    private int orderID;
+	    private LocalDate orderDate;
+	    private List<OrderDetail> lineItems;
+
+	    public Order(int orderID, LocalDate orderDate) {
+	        this.orderID = orderID;
+	        this.orderDate = orderDate;
+	        this.lineItems = new ArrayList<>();
+	    }
+	    public int getorderID() {
+	        return orderID;
+	    }
+	    public void setorderID(int orderID) {
+	        this.orderID = orderID;
+	    }
+	    public LocalDate getorderDate() {
+	        return orderDate;
+	    }
+	    public void setOrderDate(LocalDate orderDate) {
+	        this.orderDate = orderDate;
+	    }
+	    public List<OrderDetail> getlineItems() {
+	        return lineItems;
+	    }
+	    public void setLineIteams(List<OrderDetail> lineItems) {
+	        this.lineItems = lineItems;
+	    }
+	    public void addLineItem(Product product, int quantity) {
+	        lineItems.add(new OrderDetail(product, quantity));
+	    }
+
+	    public double calcTotalCharge() {
+	        double totalCharge = 0;
+	        for (OrderDetail orderDetail : lineItems) {
+	            totalCharge += orderDetail.calcTotalPrice();
+	        }
+	        return totalCharge;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return "Order ID: " + orderID + ", Order Date: " + orderDate;
+	    }
+	}
+
+package thuchanh3;
+
+public class OrderDetail {
+    private Product product;
+    private int quatity;
+
+    public OrderDetail(Product product, int quatity) {
+        this.product = product;
+        this.quatity = quatity;
+    }
+
+    public double calcTotalPrice() {
+        return product.getPrice() * quatity;
+    }
+    public int getQuatity() {
+        return quatity;
+    }
+    public void setQuatity(int quatity) {
+        this.quatity = quatity;
+    }
+    public Product getProduct() {
+        return product;
+    }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    @Override
+    public String toString() {
+        return "Product: " + product + ", Quatity: " + quatity;
+    }
+}
+
+package thuchanh3;
+public class Product {
+    private String productID;
+    private String description;
+    private double price;
+   
+    public Product(String productID, String description, double price) {
+        this.productID = productID;
+        this.description = description;
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public String getProductID() {
+        return productID;
+    }
+ public void setProductID(String productID) {
+        this.productID = productID;
+    }
+    public double getPrice() {
+        return price;
+    }
+   public void setCode(double price) {
+        this.price = price;
+    }
+  
+
+
+    @Override
+    public String toString() {
+        return "Product ID: " + productID + ", Description: " + description + ", Price: " + price;
+    }
+}
+package thuchanh3;
+import java.time.LocalDate;
+import java.text.DecimalFormat;
+import java.util.List;
+public class Main {
+public static void main(String[] args) {
+    Product product1 = new Product("Nuoc tuong", "Sp 4", 8000);
+    Product product2 = new Product("Gao", "Sp 1", 18000);
+    Product product3 = new Product("Duong", "Sp 3", 10000);
+    Product product4 = new Product("Gao", "Sp 2", 18000);
+
+    Order order = new Order(1, LocalDate.now());
+
+    order.addLineItem(product1, 10);
+    order.addLineItem(product2, 5);
+    order.addLineItem(product3, 1);
+    order.addLineItem(product4, 1);
+
+    System.out.println("Mã hóa đơn: " + order.getorderID());
+    System.out.println("Ngày lập hóa đơn: " + order.getorderDate());
+
+    System.out.println("STT | Mã SP   | Mô tả              | Đơn giá   | Số lượng | Thành tiền");
+    DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+    List<OrderDetail> lineItems = order.getlineItems();
+    int stt = 1;
+    double totalCharge = 0;
+
+    for (OrderDetail item : lineItems) {
+        double itemTotal = item.getProduct().getPrice() * item.getQuatity();
+        totalCharge += itemTotal;
+
+        System.out.printf("%-3d | %-7s | %-18s | %-9s | %-8d | %s%n", stt, item.getProduct(),
+                item.getProduct().getDescription(), decimalFormat.format(item.getProduct().getPrice()),
+                item.getQuatity(), decimalFormat.format(itemTotal));
+
+        stt++;
+    }
+    System.out.println("Tổng tiền thanh toán: " + decimalFormat.format(totalCharge));
+}
+}
